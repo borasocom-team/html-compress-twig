@@ -10,7 +10,10 @@
 
 namespace nochso\HtmlCompressTwig;
 
-use Twig_Environment;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 use WyriHaximus\HtmlCompress\Factory;
 
 /**
@@ -19,7 +22,7 @@ use WyriHaximus\HtmlCompress\Factory;
  * @author Marcel Voigt <mv@noch.so>
  * @copyright Copyright (c) 2015 Marcel Voigt <mv@noch.so>
  */
-class Extension extends \Twig_Extension
+class Extension extends AbstractExtension
 {
     /**
      * @var array
@@ -51,7 +54,7 @@ class Extension extends \Twig_Extension
         $this->callable = array($this, 'compress');
     }
 
-    public function compress(Twig_Environment $twig, $html)
+    public function compress(Environment $twig, $html)
     {
         if (!$twig->isDebug() || $this->forceCompression) {
             return $this->parser->compress($html);
@@ -69,14 +72,14 @@ class Extension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('htmlcompress', $this->callable, $this->options),
+            new TwigFunction('htmlcompress', $this->callable, $this->options),
         );
     }
 
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('htmlcompress', $this->callable, $this->options),
+            new TwigFilter('htmlcompress', $this->callable, $this->options),
         );
     }
 }
