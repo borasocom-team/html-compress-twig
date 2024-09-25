@@ -10,18 +10,19 @@
 
 namespace nochso\HtmlCompressTwig;
 
-use Twig_Token;
-use Twig_TokenParser;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
-class MinifyHtmlTokenParser extends Twig_TokenParser
+
+class MinifyHtmlTokenParser extends AbstractTokenParser
 {
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse(array($this, 'decideHtmlCompressEnd'), true);
-        $stream->expect(Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
         $nodes = array('body' => $body);
         return new MinifyHtmlNode($nodes, array(), $lineNumber, $this->getTag());
     }
@@ -31,7 +32,7 @@ class MinifyHtmlTokenParser extends Twig_TokenParser
         return 'htmlcompress';
     }
 
-    public function decideHtmlCompressEnd(Twig_Token $token)
+    public function decideHtmlCompressEnd(Token $token)
     {
         return $token->test('endhtmlcompress');
     }
