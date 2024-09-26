@@ -50,7 +50,7 @@ class Extension extends AbstractExtension
     public function __construct($forceCompression = false)
     {
         $this->forceCompression = $forceCompression;
-        $this->parser = Factory::constructSmallest();
+        $this->parser = Factory::construct();
         $this->callable = array($this, 'compress');
     }
 
